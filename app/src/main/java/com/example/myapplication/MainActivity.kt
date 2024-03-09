@@ -81,6 +81,9 @@ fun MainScreen() {
     var text by remember {
         mutableStateOf("")
     }
+    var primeVal by remember {
+        mutableStateOf("")
+    }
 
     var labelBottomButton = if (pagerState.pageCount == 0) "GET STARTED" else "GENERATE BILANGAN PRIMA"
 
@@ -108,7 +111,27 @@ fun MainScreen() {
                 }
 
                 Row(modifier = Modifier.padding(24.dp)) {
-                    Button(onClick = { onClick() },
+                    Button(onClick = {
+                        var low = 1
+
+                        fun primeNumber(num: Int): Boolean {
+                            var flag = true
+                            for (i in 2..num / 2) {
+                                if (num % i == 0) {
+                                    flag = false
+                                    break
+                                }
+                            }
+                            return flag
+                        }
+
+                        while (low < text.toInt()) {
+                            if (primeNumber(low))
+                                primeVal = low.toString() + ""
+                            ++low
+                        }
+
+                                     },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),
@@ -220,6 +243,17 @@ fun MainScreen() {
                                     disabledContainerColor = Color.Transparent,
                                 )
                             )
+
+                            Text(text = "$primeVal",
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp,
+                                textAlign = TextAlign.Start,
+                                style = LocalTextStyle.current.merge(
+                                    TextStyle(
+                                        lineHeight = 1.2.em
+                                    )
+                                )
+                            )
                         }
 
                     }
@@ -230,10 +264,6 @@ fun MainScreen() {
 
 
 
-}
-
-fun onClick() {
-    TODO("Not yet implemented")
 }
 
 @Preview(showBackground = true)
